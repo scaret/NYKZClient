@@ -7,9 +7,18 @@ script
       $routeProvider
         .when '/board/:boardName', 
           controller: postIndexController
-          templateUrl:"boardIndex.html"
+          templateUrl:"postIndex.html"
         .when '/board/:boardName/start/:startFrom',
           controller: postIndexController
+          templateUrl:"postIndex.html"
+        .when '/',
+          controller: boardIndexController
           templateUrl:"boardIndex.html"
+        .when '/pst/board/:board/file/:file',
+          controller: postViewController
+          templateUrl:"postView.html" 
+       .when '/user/:userid',
+          controller: userViewController
+          templateUrl:"userView.html"
 
 // ENDOF router.jade

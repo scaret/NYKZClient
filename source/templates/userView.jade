@@ -1,0 +1,22 @@
+//userView.jade
+
+table.table
+  tr
+    td ID
+    td {{user.userid}}
+  tr
+    td 昵称
+    td {{user.username}}
+  tr
+    td 性别
+    td {{user.gender}}
+  tr
+    td 登陆次数
+    td {{user.numlogins}}
+  tr
+    td 权限
+    td
+      p(ng-repeat="perm in user.userperm") {{perm}}
+
+
+//userView.jade

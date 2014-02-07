@@ -2,19 +2,41 @@
 
 script
   :coffeescript(bare="true")
+
     postIndexController = ($scope, $routeParams, $http)->
       console.log $routeParams
       queryString = "?"
       if $routeParams.startFrom != undefined
         if $routeParams.startFrom < 1
           $routeParams.startFrom  = 1
-        queryString += "start=" + $routeParams.startFrom 
+        queryString += "start=" + $routeParams.startFrom
       $http.get("http://nykz.drupal.scaret.in/v1/nykzPost/" + $routeParams.boardName + queryString).success (data)->
         $scope.postIndices = data
         $scope.state =
           board: $routeParams.boardName
           start: data[0].index
           end: data[data.length - 1].index
-        $scope.gotoPost = gotoPost($scope.state.board)
+      $scope.gotoPost = window.gotoPost($routeParams.boardName )
       $scope.friendly_time = friendly_time
+
+    boardIndexController = ($scope, $routeParams, $http)->
+      $http.get("http://nykz.drupal.scaret.in/v1/nykzBoard").success (data)->
+        data = _.reject data,(obj)->
+          return _.contains boardBlacklist, obj.name
+        $scope.boardIndicies = _.groupBy data, (obj)->
+          obj.catagory_name
+        console.log $scope.boardIndicies
+
+    postViewController = ($scope, $routeParams, $http)->
+      console.log $routeParams
+      $http.get("http://nykz.drupal.scaret.in/v1/nykzPost/#{$routeParams.board}/M.#{$routeParams.file}.A/#{$routeParams.file}").success (data)->
+        $scope.article = data
+        console.log data
+
+    userViewController = ($scope, $routeParams, $http)->
+      console.log $routeParams
+      $http.get("http://nykz.drupal.scaret.in/v1/nykzUser/#{$routeParams.userid}").success (data)->
+        $scope.user = data
+        console.log data
+
 // ENDOF controllers.jade

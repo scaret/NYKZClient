@@ -4,7 +4,7 @@ script
       now_d = new Date()
       ct = now_d.getTime()/1000 - parseInt time_stamp
       if ct < 0 or ct > 60*60*24*7
-        return now_d.toLocaleDateString()
+        return new Date(time_stamp*1000).toLocaleDateString()
       else if ct < 60
         return "#{Math.floor(ct)}秒前"
       else if ct < 60*60
@@ -17,4 +17,5 @@ script
       ()->
         postNo = parseInt prompt "转到 " + board+ " 板第几帖"
         if postNo > 0
-          window.location.href = "#/board/" + $scope.state.board + "/start/" + postNo
+          window.location.href = "#/board/" + board + "/start/" + postNo
+    boardBlacklist = ["syssecurity", "MoneyAdmin","TrainingAdmin","Merchant","CrossPost","CrossAdmin","cnTest","mikexy"]

@@ -1,0 +1,36 @@
+// postIndex.jade
+
+nav.navbar.navbar-default(role="navigation")
+  .collapse.navbar-collapse
+    .navbar-header
+    a.navbar-brand(href="#") {{state.board}}
+    ul.nav.navbar-nav.navbar-right
+      li: a(href="#/board/{{state.board}}/start/{{state.start - 20}}"): .glyphicon.glyphicon-chevron-left
+      li: a(href="#/board/{{state.board}}/start/{{state.start + 20}}"): .glyphicon.glyphicon-chevron-right
+      li.dropdown
+        a.dropdown-toggle(data-toggle="dropdown")
+          span.glyphicon.glyphicon-align-justify
+        ul.dropdown-menu
+          li: a(href="#/board/{{state.board}}/start/1") 转到第一页
+          li: a(href="#/board/{{state.board}}") 转到最末页
+          li: a(ng-click="gotoPost()") 转到第几帖
+table.table
+  thead
+    tr
+      th 序号
+      th 作者
+      th 日期
+      th 标题
+  tr(ng-repeat="postIndex in postIndices")
+    td {{postIndex.index}}
+    td: a(href="#/user/{{postIndex.owner}}") {{postIndex.owner}}
+    td {{friendly_time(postIndex.id)}}
+    td: a(href="#/pst/board/{{postIndex.board}}/file/{{postIndex.id}}") {{postIndex.title}}
+
+nav.navbar.navbar-default(role="navigation")
+  .collapse.navbar-collapse
+    ul.nav.navbar-nav.navbar-right
+      li: a(href="#/board/{{state.board}}/start/{{state.start - 20}}"): .glyphicon.glyphicon-chevron-left
+      li: a(href="#/board/{{state.board}}/start/{{state.start + 20}}"): .glyphicon.glyphicon-chevron-right
+
+// ENDOF postIndex.jade

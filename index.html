@@ -12,14 +12,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta charset="utf-8">
     <!-- ENDOF header.jade-->
-    <script>var friendly_time, gotoPost;
+    <script>var boardBlacklist, friendly_time, gotoPost;
 
 friendly_time = function(time_stamp) {
   var ct, now_d;
   now_d = new Date();
   ct = now_d.getTime() / 1000 - parseInt(time_stamp);
   if (ct < 0 || ct > 60 * 60 * 24 * 7) {
-    return now_d.toLocaleDateString();
+    return new Date(time_stamp * 1000).toLocaleDateString();
   } else if (ct < 60) {
     return "" + (Math.floor(ct)) + "秒前";
   } else if (ct < 60 * 60) {
@@ -36,34 +36,16 @@ gotoPost = function(board) {
     var postNo;
     postNo = parseInt(prompt("转到 " + board + " 板第几帖"));
     if (postNo > 0) {
-      return window.location.href = "#/board/" + $scope.state.board + "/start/" + postNo;
+      return window.location.href = "#/board/" + board + "/start/" + postNo;
     }
   };
 };
 
-    </script>
-    <!-- router.jade-->
-    <script>(function() {
-  var nykzClient;
-
-  nykzClient = angular.module('nykzClient', ['ngRoute']);
-
-  nykzClient.config(function($routeProvider) {
-    return $routeProvider.when('/board/:boardName', {
-      controller: postIndexController,
-      templateUrl: "boardIndex.html"
-    }).when('/board/:boardName/start/:startFrom', {
-      controller: postIndexController,
-      templateUrl: "boardIndex.html"
-    });
-  });
-
-}).call(this);
+boardBlacklist = ["syssecurity", "MoneyAdmin", "TrainingAdmin", "Merchant", "CrossPost", "CrossAdmin", "cnTest", "mikexy"];
 
     </script>
-    <!-- ENDOF router.jade-->
     <!-- controllers.jade-->
-    <script>var postIndexController;
+    <script>var boardIndexController, postIndexController, postViewController, userViewController;
 
 postIndexController = function($scope, $routeParams, $http) {
   var queryString;
@@ -77,29 +59,88 @@ postIndexController = function($scope, $routeParams, $http) {
   }
   $http.get("http://nykz.drupal.scaret.in/v1/nykzPost/" + $routeParams.boardName + queryString).success(function(data) {
     $scope.postIndices = data;
-    $scope.state = {
+    return $scope.state = {
       board: $routeParams.boardName,
       start: data[0].index,
       end: data[data.length - 1].index
     };
-    return $scope.gotoPost = gotoPost($scope.state.board);
   });
+  $scope.gotoPost = window.gotoPost($routeParams.boardName);
   return $scope.friendly_time = friendly_time;
+};
+
+boardIndexController = function($scope, $routeParams, $http) {
+  return $http.get("http://nykz.drupal.scaret.in/v1/nykzBoard").success(function(data) {
+    data = _.reject(data, function(obj) {
+      return _.contains(boardBlacklist, obj.name);
+    });
+    $scope.boardIndicies = _.groupBy(data, function(obj) {
+      return obj.catagory_name;
+    });
+    return console.log($scope.boardIndicies);
+  });
+};
+
+postViewController = function($scope, $routeParams, $http) {
+  console.log($routeParams);
+  return $http.get("http://nykz.drupal.scaret.in/v1/nykzPost/" + $routeParams.board + "/M." + $routeParams.file + ".A/" + $routeParams.file).success(function(data) {
+    $scope.article = data;
+    return console.log(data);
+  });
+};
+
+userViewController = function($scope, $routeParams, $http) {
+  console.log($routeParams);
+  return $http.get("http://nykz.drupal.scaret.in/v1/nykzUser/" + $routeParams.userid).success(function(data) {
+    $scope.user = data;
+    return console.log(data);
+  });
 };
 
     </script>
     <!-- ENDOF controllers.jade-->
+    <!-- router.jade-->
+    <script>(function() {
+  var nykzClient;
+
+  nykzClient = angular.module('nykzClient', ['ngRoute']);
+
+  nykzClient.config(function($routeProvider) {
+    return $routeProvider.when('/board/:boardName', {
+      controller: postIndexController,
+      templateUrl: "postIndex.html"
+    }).when('/board/:boardName/start/:startFrom', {
+      controller: postIndexController,
+      templateUrl: "postIndex.html"
+    }).when('/', {
+      controller: boardIndexController,
+      templateUrl: "boardIndex.html"
+    }).when('/pst/board/:board/file/:file', {
+      controller: postViewController,
+      templateUrl: "postView.html"
+    }).when('/user/:userid', {
+      controller: userViewController,
+      templateUrl: "userView.html"
+    });
+  });
+
+}).call(this);
+
+    </script>
+    <!-- ENDOF router.jade-->
   </head>
   <body>
     <!-- navbar.jade-->
     <nav role="navigation" class="navbar navbar-default navbar-fixed-top  navbar-inverse">
       <div class="container">
-        <div class="navbar-header"><a href="#" class="navbar-brand">南洋客栈</a><a href="#" class="navbar-brand">{{state.}}</a></div>
+        <div class="navbar-header"><a href="#" class="navbar-brand">南洋客栈</a></div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">
-                <div class="glyphicon glyphicon-search"></div></a></li>
-            <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">
+            <li><a href="javascript:window.location.reload();">
+                <div class="glyphicon glyphicon-refresh"></div></a></li>
+            <li><a href="javascript:window.history.go(-1);">
+                <div class="glyphicon glyphicon-arrow-left"></div></a></li>
+            <li class="dropdown"><a data-toggle="dropdown" class="dropdown-toggle">
                 <div class="glyphicon glyphicon-chevron-down"></div></a>
               <ul class="dropdown-menu">
                 <li><a href="#">Action</a></li>
@@ -118,19 +159,13 @@ postIndexController = function($scope, $routeParams, $http) {
     <!-- ENDOF navbar.jade-->
     <div id="content" class="container-fluid">
       <!-- content.jade-->
-      <ul>
-        <li><a href="#/board/NYKZXin">board/NYKZXin</a></li>
-        <li><a href="#/board/YSSY">board/YSSY</a></li>
-        <li><a href="#/board/Tsai">board/Tsai</a></li>
-        <li><a href="#/board/NanYangKeZhan">board/NanYangKeZhan</a></li>
-      </ul>
       <ng-view></ng-view>
       <!-- ENDOF content.jade-->
     </div>
     <!-- footer.jade-->
     <!-- ENDOF footer.jade-->
     <style>#content {
-  margin-top: 50px;
+  margin-top: 70px;
 }
 
     </style>

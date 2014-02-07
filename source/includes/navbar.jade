@@ -4,12 +4,12 @@ nav(class="navbar navbar-default navbar-fixed-top  navbar-inverse",role="navigat
   .container
     .navbar-header
       a.navbar-brand(href="#") 南洋客栈
-      a.navbar-brand(href="#") {{state.}}
     .collapse.navbar-collapse
       ul.nav.navbar-nav.navbar-right
-        li: a(href="#"): .glyphicon.glyphicon-search
+        li: a(href="javascript:window.location.reload();"): .glyphicon.glyphicon-refresh
+        li: a(href="javascript:window.history.go(-1);"): .glyphicon.glyphicon-arrow-left
         li.dropdown
-          a.dropdown-toggle(href="#", data-toggle="dropdown"): .glyphicon.glyphicon-chevron-down
+          a.dropdown-toggle(data-toggle="dropdown"): .glyphicon.glyphicon-chevron-down
           ul.dropdown-menu
             li: a(href="#") Action
             li: a(href="#") Another Action

@@ -1,0 +1,27 @@
+
+<!--userView.jade-->
+<table class="table">
+  <tr>
+    <td>ID</td>
+    <td>{{user.userid}}</td>
+  </tr>
+  <tr>
+    <td>昵称</td>
+    <td>{{user.username}}</td>
+  </tr>
+  <tr>
+    <td>性别</td>
+    <td>{{user.gender}}</td>
+  </tr>
+  <tr>
+    <td>登陆次数</td>
+    <td>{{user.numlogins}}</td>
+  </tr>
+  <tr>
+    <td>权限</td>
+    <td>
+      <p ng-repeat="perm in user.userperm">{{perm}}</p>
+    </td>
+  </tr>
+</table>
+<!--userView.jade-->
