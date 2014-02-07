@@ -1,0 +1,11 @@
+// controllers.jade
+
+script
+  :coffeescript
+    postIndexController = ($scope, $routeParams, $http)->
+      console.log $routeParams.boardName
+      $http.get("http://nykz.drupal.scaret.in/v1/nykzPost/" + $routeParams.boardName + "?start=20").success (data)->
+        $scope.postIndices = data
+        console.log data
+
+// ENDOF controllers.jade

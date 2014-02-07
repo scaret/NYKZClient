@@ -1,8 +1,15 @@
 doctype html
-html
+html(ng-app="nykzClient")
   head
     include includes/header
+    include includes/router
+    include includes/controllers
   body
     include includes/navbar
-    include includes/content
+    #content.container-fluid
+      include includes/content
     include includes/footer
+    style
+      :stylus
+        #content
+          margin-top: 50px

@@ -1,2 +1,2 @@
 #!/bin/sh
-jade index.jade -Pwo ..
+jade index.jade templates -Pwo ..

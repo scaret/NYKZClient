@@ -1,16 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="nykzClient">
   <head>
+    <!-- header.jade-->
     <script src="js/jquery-1.11.0.js"></script>
     <script src="js/underscore.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/angular.js"></script>
+    <script src="js/angular-route.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta charset="utf-8">
+    <!-- ENDOF header.jade-->
+    <!-- router.jade-->
+    <script>(function() {
+  var nykzClient;
+
+  nykzClient = angular.module('nykzClient', ['ngRoute']);
+
+  nykzClient.config(function($routeProvider) {
+    $routeProvider.when('/board/:boardName', {
+      controller: postIndexController,
+      templateUrl: "boardIndex.html"
+    });
+    return console.log($routeProvider);
+  });
+
+}).call(this);
+
+    </script>
+    <!-- ENDOF router.jade-->
+    <!-- controllers.jade-->
+    <script>(function() {
+  var postIndexController;
+
+  postIndexController = function($scope, $routeParams, $http) {
+    console.log($routeParams.boardName);
+    return $http.get("http://nykz.drupal.scaret.in/v1/nykzPost/" + $routeParams.boardName + "?start=20").success(function(data) {
+      $scope.postIndices = data;
+      return console.log(data);
+    });
+  };
+
+}).call(this);
+
+    </script>
+    <!-- ENDOF controllers.jade-->
   </head>
   <body>
+    <!-- navbar.jade-->
     <nav role="navigation" class="navbar navbar-default navbar-fixed-top  navbar-inverse">
       <div class="container">
         <div class="navbar-header"><a href="#" class="navbar-brand">南洋客栈</a></div>
@@ -34,15 +72,24 @@
         </div>
       </div>
     </nav>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-1">1</div>
-        <div class="col-md-2">2</div>
-        <div class="col-md-3">3</div>
-        <div class="col-md-4">4</div>
-        <div class="col-md-2">2</div>
-        <div class="col-md-1">1</div>
-      </div>
+    <!-- ENDOF navbar.jade-->
+    <div id="content" class="container-fluid">
+      <!-- content.jade-->
+      <ul>
+        <li><a href="#/board/NYKZXin">board/NYKZXin</a></li>
+        <li><a href="#/board/YSSY">board/YSSY</a></li>
+        <li><a href="#/board/Tsai">board/Tsai</a></li>
+        <li><a href="#/board/NanYangKeZhan">board/NanYangKeZhan</a></li>
+      </ul>
+      <ng-view></ng-view>
+      <!-- ENDOF content.jade-->
     </div>
+    <!-- footer.jade-->
+    <!-- ENDOF footer.jade-->
+    <style>#content {
+  margin-top: 50px;
+}
+
+    </style>
   </body>
 </html>

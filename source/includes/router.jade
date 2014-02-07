@@ -1,0 +1,10 @@
+// router.jade
+
+script
+  :coffeescript
+    nykzClient = angular.module 'nykzClient',['ngRoute']
+    nykzClient.config ($routeProvider)->
+      $routeProvider.
+        when '/board/:boardName', {controller:postIndexController, templateUrl:"boardIndex.html"}
+      console.log $routeProvider
+// ENDOF router.jade
