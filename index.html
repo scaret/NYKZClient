@@ -12,6 +12,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta charset="utf-8">
     <!-- ENDOF header.jade-->
+    <script>var friendly_time, gotoPost;
+
+friendly_time = function(time_stamp) {
+  var ct, now_d;
+  now_d = new Date();
+  ct = now_d.getTime() / 1000 - parseInt(time_stamp);
+  if (ct < 0 || ct > 60 * 60 * 24 * 7) {
+    return now_d.toLocaleDateString();
+  } else if (ct < 60) {
+    return "" + (Math.floor(ct)) + "秒前";
+  } else if (ct < 60 * 60) {
+    return "" + (Math.floor(ct / 60)) + "分钟前";
+  } else if (ct < 60 * 60 * 24) {
+    return "" + (Math.floor(ct / 60 / 60)) + "小时前";
+  } else {
+    return "" + (Math.floor(ct / 60 / 60 / 24)) + "天前";
+  }
+};
+
+gotoPost = function(board) {
+  return function() {
+    var postNo;
+    postNo = parseInt(prompt("转到 " + board + " 板第几帖"));
+    if (postNo > 0) {
+      return window.location.href = "#/board/" + $scope.state.board + "/start/" + postNo;
+    }
+  };
+};
+
+    </script>
     <!-- router.jade-->
     <script>(function() {
   var nykzClient;
@@ -19,11 +49,13 @@
   nykzClient = angular.module('nykzClient', ['ngRoute']);
 
   nykzClient.config(function($routeProvider) {
-    $routeProvider.when('/board/:boardName', {
+    return $routeProvider.when('/board/:boardName', {
+      controller: postIndexController,
+      templateUrl: "boardIndex.html"
+    }).when('/board/:boardName/start/:startFrom', {
       controller: postIndexController,
       templateUrl: "boardIndex.html"
     });
-    return console.log($routeProvider);
   });
 
 }).call(this);
@@ -31,18 +63,29 @@
     </script>
     <!-- ENDOF router.jade-->
     <!-- controllers.jade-->
-    <script>(function() {
-  var postIndexController;
+    <script>var postIndexController;
 
-  postIndexController = function($scope, $routeParams, $http) {
-    console.log($routeParams.boardName);
-    return $http.get("http://nykz.drupal.scaret.in/v1/nykzPost/" + $routeParams.boardName + "?start=20").success(function(data) {
-      $scope.postIndices = data;
-      return console.log(data);
-    });
-  };
-
-}).call(this);
+postIndexController = function($scope, $routeParams, $http) {
+  var queryString;
+  console.log($routeParams);
+  queryString = "?";
+  if ($routeParams.startFrom !== void 0) {
+    if ($routeParams.startFrom < 1) {
+      $routeParams.startFrom = 1;
+    }
+    queryString += "start=" + $routeParams.startFrom;
+  }
+  $http.get("http://nykz.drupal.scaret.in/v1/nykzPost/" + $routeParams.boardName + queryString).success(function(data) {
+    $scope.postIndices = data;
+    $scope.state = {
+      board: $routeParams.boardName,
+      start: data[0].index,
+      end: data[data.length - 1].index
+    };
+    return $scope.gotoPost = gotoPost($scope.state.board);
+  });
+  return $scope.friendly_time = friendly_time;
+};
 
     </script>
     <!-- ENDOF controllers.jade-->
@@ -51,7 +94,7 @@
     <!-- navbar.jade-->
     <nav role="navigation" class="navbar navbar-default navbar-fixed-top  navbar-inverse">
       <div class="container">
-        <div class="navbar-header"><a href="#" class="navbar-brand">南洋客栈</a></div>
+        <div class="navbar-header"><a href="#" class="navbar-brand">南洋客栈</a><a href="#" class="navbar-brand">{{state.}}</a></div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#">

@@ -1,11 +1,20 @@
 // controllers.jade
 
 script
-  :coffeescript
+  :coffeescript(bare="true")
     postIndexController = ($scope, $routeParams, $http)->
-      console.log $routeParams.boardName
-      $http.get("http://nykz.drupal.scaret.in/v1/nykzPost/" + $routeParams.boardName + "?start=20").success (data)->
+      console.log $routeParams
+      queryString = "?"
+      if $routeParams.startFrom != undefined
+        if $routeParams.startFrom < 1
+          $routeParams.startFrom  = 1
+        queryString += "start=" + $routeParams.startFrom 
+      $http.get("http://nykz.drupal.scaret.in/v1/nykzPost/" + $routeParams.boardName + queryString).success (data)->
         $scope.postIndices = data
-        console.log data
-
+        $scope.state =
+          board: $routeParams.boardName
+          start: data[0].index
+          end: data[data.length - 1].index
+        $scope.gotoPost = gotoPost($scope.state.board)
+      $scope.friendly_time = friendly_time
 // ENDOF controllers.jade
