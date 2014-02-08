@@ -40,3 +40,11 @@ script
             updatecsrf ->
           .fail (data)->
             callback data,null
+
+    doPost = (data,callback)->
+      updatecsrf ->
+        $.post("#{endpointurl}/nykzPost/#{data.board}", data)
+        .success (data)->
+          callback null, data
+        .fail (data)->
+          callback data,null

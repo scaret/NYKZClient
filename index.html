@@ -29,7 +29,7 @@ csrftoken = "";
 
     </script>
     <!-- ENDOF config.jade-->
-    <script>var boardBlacklist, friendly_time, gotoPost, login, updatecsrf;
+    <script>var boardBlacklist, doPost, friendly_time, gotoPost, login, updatecsrf;
 
 friendly_time = function(time_stamp) {
   var ct, now_d;
@@ -96,6 +96,16 @@ login = function(callback) {
   });
 };
 
+doPost = function(data, callback) {
+  return updatecsrf(function() {
+    return $.post("" + endpointurl + "/nykzPost/" + data.board, data).success(function(data) {
+      return callback(null, data);
+    }).fail(function(data) {
+      return callback(data, null);
+    });
+  });
+};
+
     </script>
     <!-- controllers.jade-->
     <script>var boardIndexController, bodyController, postIndexController, postViewController, userViewController;
@@ -138,6 +148,7 @@ postViewController = function($scope, $routeParams, $http) {
   console.log($routeParams);
   return $http.get("" + endpointurl + "/nykzPost/" + $routeParams.board + "/M." + $routeParams.file + ".A/" + $routeParams.file).success(function(data) {
     $scope.article = data;
+    window.currentPost = data;
     return console.log(data);
   });
 };
@@ -265,6 +276,48 @@ bodyController = function($scope, $http) {
 
     </script>
     <!-- ENDOF loginModal-->
+    <!-- simpleReplyModal.jade-->
+    <div id="simpleReplyModal" tabindex="-1" role="dialog" aria-labelledby="simpleReplyModalLabel" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <form role="form">
+              <div class="form-group">
+                <label for="replyText">回复：</label>
+                <input id="replyText" type="text" placeholder="在此输入回复内容：" class="form-control">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" onclick="callReplySimple()" class="btn btn-default">回复</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>(function() {
+  window.callReplySimple = function() {
+    var board, content, refilename;
+    content = $("#replyText").val();
+    refilename = "M." + window.currentPost.index.reid + ".A";
+    board = window.currentPost.index.board;
+    return doPost({
+      content: content,
+      refilename: refilename,
+      board: board
+    }, function(err, data) {
+      if (data) {
+        $("#simpleReplyModal").modal("hide");
+      }
+      if (err) {
+        return alert("各种原因的无法发帖：需要重新登录\n您没有权限\n服务器挂了");
+      }
+    });
+  };
+
+}).call(this);
+
+    </script>
+    <!-- ENDOF simpleReplyModal.jade-->
     <!-- ENDOF footer.jade-->
     <style>#content {
   margin-top: 70px;
