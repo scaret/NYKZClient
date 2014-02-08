@@ -2,10 +2,11 @@ doctype html
 html(ng-app="nykzClient")
   head
     include includes/header
+    include includes/config
     include includes/util
     include includes/controllers
     include includes/router
-  body
+  body(ng-controller="bodyController")
     include includes/navbar
     #content.container-fluid
       include includes/content

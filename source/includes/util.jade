@@ -19,3 +19,24 @@ script
         if postNo > 0
           window.location.href = "#/board/" + board + "/start/" + postNo
     boardBlacklist = ["syssecurity", "MoneyAdmin","TrainingAdmin","Merchant","CrossPost","CrossAdmin","cnTest","mikexy"]
+
+    updatecsrf = (callback)->
+      $.get(csrfurl).success (data)->
+        window.csrftoken = data
+        $.ajaxSetup {headers:{"X-CSRF-token": data}}
+        callback()
+        data
+
+    login = (callback)->
+      console.log "login..."
+      updatecsrf ->
+        if(window.localStorage && window.localStorage.username && window.localStorage.pw)
+          user = window.localStorage.username
+          pw = window.localStorage.pw
+          header = {"X-CSRF-token": window.csrftoken}
+          $.post("#{endpointurl}/nykzUser/login", {user,pw})
+          .success (data)->
+            callback null, data
+            updatecsrf ->
+          .fail (data)->
+            callback data,null

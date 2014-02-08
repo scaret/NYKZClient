@@ -3,8 +3,6 @@
 script
   :coffeescript(bare="true")
 
-    endpointurl = "http://nykz.drupal.scaret.in/v1"
-
     postIndexController = ($scope, $routeParams, $http)->
       console.log $routeParams
       queryString = "?"
@@ -40,5 +38,11 @@ script
       $http.get("#{endpointurl}/nykzUser/#{$routeParams.userid}").success (data)->
         $scope.user = data
         console.log data
+
+    bodyController = ($scope, $http)->
+      if window.localStorage && window.localStorage.username
+        $scope.loginState = "您好， #{window.localStorage.username}"
+      else
+        $scope.loginState = "请登陆"
 
 // ENDOF controllers.jade

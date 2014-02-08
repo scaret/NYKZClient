@@ -1,0 +1,13 @@
+// config.jade
+
+script
+  :coffeescript(bare="true")
+
+    protocol = "http"
+    host = "nykz.drupal"
+    endpoint = "v1"
+    endpointurl = "#{protocol}://#{host}/#{endpoint}"
+    csrfurl = "#{protocol}://#{host}/services/session/token"
+    csrftoken = ""
+
+// ENDOF config.jade

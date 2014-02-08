@@ -12,7 +12,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta charset="utf-8">
     <!-- ENDOF header.jade-->
-    <script>var boardBlacklist, friendly_time, gotoPost;
+    <!-- config.jade-->
+    <script>var csrftoken, csrfurl, endpoint, endpointurl, host, protocol;
+
+protocol = "http";
+
+host = "nykz.drupal";
+
+endpoint = "v1";
+
+endpointurl = "" + protocol + "://" + host + "/" + endpoint;
+
+csrfurl = "" + protocol + "://" + host + "/services/session/token";
+
+csrftoken = "";
+
+    </script>
+    <!-- ENDOF config.jade-->
+    <script>var boardBlacklist, friendly_time, gotoPost, login, updatecsrf;
 
 friendly_time = function(time_stamp) {
   var ct, now_d;
@@ -43,11 +60,45 @@ gotoPost = function(board) {
 
 boardBlacklist = ["syssecurity", "MoneyAdmin", "TrainingAdmin", "Merchant", "CrossPost", "CrossAdmin", "cnTest", "mikexy"];
 
+updatecsrf = function(callback) {
+  return $.get(csrfurl).success(function(data) {
+    window.csrftoken = data;
+    $.ajaxSetup({
+      headers: {
+        "X-CSRF-token": data
+      }
+    });
+    callback();
+    return data;
+  });
+};
+
+login = function(callback) {
+  console.log("login...");
+  return updatecsrf(function() {
+    var header, pw, user;
+    if (window.localStorage && window.localStorage.username && window.localStorage.pw) {
+      user = window.localStorage.username;
+      pw = window.localStorage.pw;
+      header = {
+        "X-CSRF-token": window.csrftoken
+      };
+      return $.post("" + endpointurl + "/nykzUser/login", {
+        user: user,
+        pw: pw
+      }).success(function(data) {
+        callback(null, data);
+        return updatecsrf(function() {});
+      }).fail(function(data) {
+        return callback(data, null);
+      });
+    }
+  });
+};
+
     </script>
     <!-- controllers.jade-->
-    <script>var boardIndexController, endpointurl, postIndexController, postViewController, userViewController;
-
-endpointurl = "http://nykz.drupal.scaret.in/v1";
+    <script>var boardIndexController, bodyController, postIndexController, postViewController, userViewController;
 
 postIndexController = function($scope, $routeParams, $http) {
   var queryString;
@@ -99,6 +150,14 @@ userViewController = function($scope, $routeParams, $http) {
   });
 };
 
+bodyController = function($scope, $http) {
+  if (window.localStorage && window.localStorage.username) {
+    return $scope.loginState = "您好， " + window.localStorage.username;
+  } else {
+    return $scope.loginState = "请登陆";
+  }
+};
+
     </script>
     <!-- ENDOF controllers.jade-->
     <!-- router.jade-->
@@ -131,7 +190,7 @@ userViewController = function($scope, $routeParams, $http) {
     </script>
     <!-- ENDOF router.jade-->
   </head>
-  <body>
+  <body ng-controller="bodyController">
     <!-- navbar.jade-->
     <nav role="navigation" class="navbar navbar-default navbar-fixed-top  navbar-inverse">
       <div class="container">
@@ -145,13 +204,7 @@ userViewController = function($scope, $routeParams, $http) {
             <li class="dropdown"><a data-toggle="dropdown" class="dropdown-toggle">
                 <div class="glyphicon glyphicon-chevron-down"></div></a>
               <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another Action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li><a href="#">Separated</a></li>
-                <li class="divider"></li>
-                <li><a href="#">One more divider</a></li>
+                <li><a href="javascript:$('#loginModal').modal()">{{loginState}}</a></li>
               </ul>
             </li>
           </ul>
@@ -165,6 +218,53 @@ userViewController = function($scope, $routeParams, $http) {
       <!-- ENDOF content.jade-->
     </div>
     <!-- footer.jade-->
+    <!-- loginModal-->
+    <div id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4 id="loginModalLabel" class="modal-title">登陆南洋客栈</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form">
+              <div class="form-group">
+                <label for="loginusername">用户名</label>
+                <input id="loginusername" type="text" placeholder="username" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="loginusername">密码</label>
+                <input id="loginpw" type="password" placeholder="password" class="form-control">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" onclick="callLogin()" class="btn btn-default">登陆</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>(function() {
+  window.callLogin = function() {
+    window.localStorage.username = $("#loginusername").val();
+    window.localStorage.pw = $("#loginpw").val();
+    return login(function(err, data) {
+      if (data) {
+        window.localStorage.user = JSON.stringify(data);
+        window.location.reload();
+      }
+      if (err) {
+        alert("各种原因的登录失败：ID需要大小写\n是否错用了水源用户名/密码\n服务器挂了");
+        window.localStorage.username = window.localStorage.pw = window.localStorage.user = "";
+        return window.location.reload();
+      }
+    });
+  };
+
+}).call(this);
+
+    </script>
+    <!-- ENDOF loginModal-->
     <!-- ENDOF footer.jade-->
     <style>#content {
   margin-top: 70px;
