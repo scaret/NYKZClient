@@ -17,7 +17,7 @@
 
 protocol = "http";
 
-host = "nykz.drupal";
+host = "nykz.drupal.scaret.in";
 
 endpoint = "v1";
 
@@ -58,7 +58,7 @@ gotoPost = function(board) {
   };
 };
 
-boardBlacklist = ["syssecurity", "MoneyAdmin", "TrainingAdmin", "Merchant", "CrossPost", "CrossAdmin", "cnTest", "mikexy"];
+boardBlacklist = [];
 
 updatecsrf = function(callback) {
   return $.get(csrfurl).success(function(data) {

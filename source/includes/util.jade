@@ -18,7 +18,7 @@ script
         postNo = parseInt prompt "转到 " + board+ " 板第几帖"
         if postNo > 0
           window.location.href = "#/board/" + board + "/start/" + postNo
-    boardBlacklist = ["syssecurity", "MoneyAdmin","TrainingAdmin","Merchant","CrossPost","CrossAdmin","cnTest","mikexy"]
+    boardBlacklist = []
 
     updatecsrf = (callback)->
       $.get(csrfurl).success (data)->
