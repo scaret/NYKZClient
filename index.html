@@ -45,7 +45,9 @@ boardBlacklist = ["syssecurity", "MoneyAdmin", "TrainingAdmin", "Merchant", "Cro
 
     </script>
     <!-- controllers.jade-->
-    <script>var boardIndexController, postIndexController, postViewController, userViewController;
+    <script>var boardIndexController, endpointurl, postIndexController, postViewController, userViewController;
+
+endpointurl = "http://nykz.drupal.scaret.in/v1";
 
 postIndexController = function($scope, $routeParams, $http) {
   var queryString;
@@ -57,7 +59,7 @@ postIndexController = function($scope, $routeParams, $http) {
     }
     queryString += "start=" + $routeParams.startFrom;
   }
-  $http.get("http://nykz.drupal.scaret.in/v1/nykzPost/" + $routeParams.boardName + queryString).success(function(data) {
+  $http.get(("" + endpointurl + "/nykzPost/") + $routeParams.boardName + queryString).success(function(data) {
     $scope.postIndices = data;
     return $scope.state = {
       board: $routeParams.boardName,
@@ -70,7 +72,7 @@ postIndexController = function($scope, $routeParams, $http) {
 };
 
 boardIndexController = function($scope, $routeParams, $http) {
-  return $http.get("http://nykz.drupal.scaret.in/v1/nykzBoard").success(function(data) {
+  return $http.get("" + endpointurl + "/nykzBoard").success(function(data) {
     data = _.reject(data, function(obj) {
       return _.contains(boardBlacklist, obj.name);
     });
@@ -83,7 +85,7 @@ boardIndexController = function($scope, $routeParams, $http) {
 
 postViewController = function($scope, $routeParams, $http) {
   console.log($routeParams);
-  return $http.get("http://nykz.drupal.scaret.in/v1/nykzPost/" + $routeParams.board + "/M." + $routeParams.file + ".A/" + $routeParams.file).success(function(data) {
+  return $http.get("" + endpointurl + "/nykzPost/" + $routeParams.board + "/M." + $routeParams.file + ".A/" + $routeParams.file).success(function(data) {
     $scope.article = data;
     return console.log(data);
   });
@@ -91,7 +93,7 @@ postViewController = function($scope, $routeParams, $http) {
 
 userViewController = function($scope, $routeParams, $http) {
   console.log($routeParams);
-  return $http.get("http://nykz.drupal.scaret.in/v1/nykzUser/" + $routeParams.userid).success(function(data) {
+  return $http.get("" + endpointurl + "/nykzUser/" + $routeParams.userid).success(function(data) {
     $scope.user = data;
     return console.log(data);
   });

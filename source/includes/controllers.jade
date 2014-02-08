@@ -3,6 +3,8 @@
 script
   :coffeescript(bare="true")
 
+    endpointurl = "http://nykz.drupal.scaret.in/v1"
+
     postIndexController = ($scope, $routeParams, $http)->
       console.log $routeParams
       queryString = "?"
@@ -10,7 +12,7 @@ script
         if $routeParams.startFrom < 1
           $routeParams.startFrom  = 1
         queryString += "start=" + $routeParams.startFrom
-      $http.get("http://nykz.drupal.scaret.in/v1/nykzPost/" + $routeParams.boardName + queryString).success (data)->
+      $http.get("#{endpointurl}/nykzPost/" + $routeParams.boardName + queryString).success (data)->
         $scope.postIndices = data
         $scope.state =
           board: $routeParams.boardName
@@ -20,7 +22,7 @@ script
       $scope.friendly_time = friendly_time
 
     boardIndexController = ($scope, $routeParams, $http)->
-      $http.get("http://nykz.drupal.scaret.in/v1/nykzBoard").success (data)->
+      $http.get("#{endpointurl}/nykzBoard").success (data)->
         data = _.reject data,(obj)->
           return _.contains boardBlacklist, obj.name
         $scope.boardIndicies = _.groupBy data, (obj)->
@@ -29,13 +31,13 @@ script
 
     postViewController = ($scope, $routeParams, $http)->
       console.log $routeParams
-      $http.get("http://nykz.drupal.scaret.in/v1/nykzPost/#{$routeParams.board}/M.#{$routeParams.file}.A/#{$routeParams.file}").success (data)->
+      $http.get("#{endpointurl}/nykzPost/#{$routeParams.board}/M.#{$routeParams.file}.A/#{$routeParams.file}").success (data)->
         $scope.article = data
         console.log data
 
     userViewController = ($scope, $routeParams, $http)->
       console.log $routeParams
-      $http.get("http://nykz.drupal.scaret.in/v1/nykzUser/#{$routeParams.userid}").success (data)->
+      $http.get("#{endpointurl}/nykzUser/#{$routeParams.userid}").success (data)->
         $scope.user = data
         console.log data
 
