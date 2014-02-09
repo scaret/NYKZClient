@@ -30,10 +30,11 @@ script
           obj.catagory_name
         console.log $scope.boardIndicies
 
-    postViewController = ($scope, $routeParams, $http)->
+    postViewController = ($scope, $routeParams, $http, $sce)->
       console.log $routeParams
       $http.get("#{endpointurl}/nykzPost/#{$routeParams.board}/M.#{$routeParams.file}.A/#{$routeParams.file}").success (data)->
         $scope.article = data
+        $scope.articleHtml =$sce.trustAsHtml window.renderPost data
         window.currentPost = data
         console.log data
 

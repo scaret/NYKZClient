@@ -5,6 +5,6 @@
     a(href="javascript:$('#simpleReplyModal').modal();") 【回复】
     span {{article.index.title}}
   .panel-body
-    pre {{article.content}}
+    pre(ng-bind-html="articleHtml")
 
 //postView.jade

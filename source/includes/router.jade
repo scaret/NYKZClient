@@ -2,7 +2,7 @@
 
 script
   :coffeescript
-    nykzClient = angular.module 'nykzClient',['ngRoute']
+    nykzClient = angular.module 'nykzClient',['ngRoute','ngSanitize']
     nykzClient.config ($routeProvider)->
       $routeProvider
         .when '/board/:boardName', 

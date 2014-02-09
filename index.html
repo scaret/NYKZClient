@@ -7,6 +7,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/angular.js"></script>
     <script src="js/angular-route.js"></script>
+    <script src="js/angular-sanitize.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -120,6 +121,32 @@ isFirstOpen = function() {
   }
 };
 
+window.renderPost = function(the_post) {
+  var content_lines, ret;
+  if (!the_post.match) {
+    return the_post.content;
+  } else {
+    ret = "";
+    content_lines = the_post.content.split("\n");
+    _.each(content_lines, function(line) {
+      var is_pic, is_url;
+      line = line.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "\n";
+      is_url = line.match(/https?:\/\/[a-zA-Z0-9\/\._\-\?]{10,80}/);
+      if (is_url) {
+        is_pic = line.match(/^.*(.jpg)|(.png)|(.gif)$/);
+        if (is_pic) {
+          return ret += "<img src=\"" + is_pic[0] + "\" class=\"img-rounded img-responsive\"/>\n";
+        } else {
+          return ret += line.replace(is_url[0], ("<a href=\"" + is_url[0] + "\" target=\"_blank\">" + is_url[0] + "</a>") + "\n");
+        }
+      } else {
+        return ret += line;
+      }
+    });
+    return ret;
+  }
+};
+
     </script>
     <!-- controllers.jade-->
     <script>var boardIndexController, bodyController, postIndexController, postViewController, userViewController;
@@ -162,10 +189,11 @@ boardIndexController = function($scope, $routeParams, $http) {
   });
 };
 
-postViewController = function($scope, $routeParams, $http) {
+postViewController = function($scope, $routeParams, $http, $sce) {
   console.log($routeParams);
   return $http.get("" + endpointurl + "/nykzPost/" + $routeParams.board + "/M." + $routeParams.file + ".A/" + $routeParams.file).success(function(data) {
     $scope.article = data;
+    $scope.articleHtml = $sce.trustAsHtml(window.renderPost(data));
     window.currentPost = data;
     return console.log(data);
   });
@@ -210,7 +238,7 @@ bodyController = function($scope, $http) {
     <script>(function() {
   var nykzClient;
 
-  nykzClient = angular.module('nykzClient', ['ngRoute']);
+  nykzClient = angular.module('nykzClient', ['ngRoute', 'ngSanitize']);
 
   nykzClient.config(function($routeProvider) {
     return $routeProvider.when('/board/:boardName', {
