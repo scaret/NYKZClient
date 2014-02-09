@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="in.scaret.nykzclient" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>南洋客栈手机客户端</name>
+    <description>
+        南洋客栈手机客户端。注册请访问telnet://nykz.net
+    </description>
+    <author email="scaret.in@gmail.com" href="http://nykz.net">
+        scaret
+    </author>
+    <feature name="http://api.phonegap.com/1.0/device" />
+    <preference name="permissions" value="none" />
+    <preference name="orientation" value="default" />
+    <preference name="target-device" value="universal" />
+    <preference name="fullscreen" value="true" />
+    <preference name="webviewbounce" value="true" />
+    <preference name="prerendered-icon" value="true" />
+    <preference name="stay-in-webview" value="false" />
+    <preference name="ios-statusbarstyle" value="black-opaque" />
+    <preference name="detect-data-types" value="true" />
+    <preference name="exit-on-suspend" value="false" />
+    <preference name="show-splash-screen-spinner" value="true" />
+    <preference name="auto-hide-splash-screen" value="true" />
+    <preference name="disable-cursor" value="false" />
+    <preference name="android-minSdkVersion" value="7" />
+    <preference name="android-installLocation" value="auto" />
+    <icon src="icon.png" />
+    <icon gap:density="ldpi" gap:platform="android" src="res/icon/android/icon-36-ldpi.png" />
+    <icon gap:density="mdpi" gap:platform="android" src="res/icon/android/icon-48-mdpi.png" />
+    <icon gap:density="hdpi" gap:platform="android" src="res/icon/android/icon-72-hdpi.png" />
+    <icon gap:density="xhdpi" gap:platform="android" src="res/icon/android/icon-96-xhdpi.png" />
+    <icon gap:platform="ios" height="29"  width="29" src="res/icon/nykz/icon-29.png" />
+    <icon gap:platform="ios" height="36"  width="36" src="res/icon/nykz/icon-36.png" />
+    <icon gap:platform="ios" height="40"  width="40" src="res/icon/nykz/icon-40.png" />
+    <icon gap:platform="ios" height="48"  width="48" src="res/icon/nykz/icon-48.png" />
+    <icon gap:platform="ios" height="57"  width="57" src="res/icon/nykz/icon-57.png" />
+    <icon gap:platform="ios" height="58"  width="58" src="res/icon/nykz/icon-58.png" />
+    <icon gap:platform="ios" height="72"  width="72" src="res/icon/nykz/icon-72.png" />
+    <icon gap:platform="ios" height="76"  width="76" src="res/icon/nykz/icon-76.png" />
+    <icon gap:platform="ios" height="80"  width="80" src="res/icon/nykz/icon-80.png" />
+    <icon gap:platform="ios" height="96"  width="96" src="res/icon/nykz/icon-96.png" />
+    <icon gap:platform="ios" height="100"  width="100" src="res/icon/nykz/icon-100.png" />
+    <icon gap:platform="ios" height="114"  width="114" src="res/icon/nykz/icon-114.png" />
+    <icon gap:platform="ios" height="120"  width="120" src="res/icon/nykz/icon-120.png" />
+    <icon gap:platform="ios" height="144"  width="144" src="res/icon/nykz/icon-144.png" />
+    <icon gap:platform="ios" height="152"  width="152" src="res/icon/nykz/icon-152.png" />
+    <icon gap:platform="winphone" src="res/icon/nykz/icon-48.png" />
+    <icon gap:platform="winphone" gap:role="background" src="res/icon/nykz/icon-173.png" />
+    <gap:splash gap:density="ldpi" gap:platform="android" src="res/screen/nykz/launch_200_320.png" />
+    <gap:splash gap:density="mdpi" gap:platform="android" src="res/screen/nykz/launch_320_480.png" />
+    <gap:splash gap:density="hdpi" gap:platform="android" src="res/screen/nykz/launch_480_800.png" />
+    <gap:splash gap:density="xhdpi" gap:platform="android" src="res/screen/nykz/launch_720_1280.png" />
+    <gap:splash gap:platform="ios" height="480" src="res/screen/nykz/launch_320_480.png" width="320" />
+    <gap:splash gap:platform="ios" height="960" src="res/screen/nykz/launch_640_960.png" width="640" />
+    <gap:splash gap:platform="ios" height="1004" src="res/screen/nykz/launch_768_1004.png" width="768" />
+    <gap:splash gap:platform="winphone" src="res/screen/nykz/launch_480_800.png" />
+    <access origin="*" />
+</widget>
