@@ -330,12 +330,11 @@ bodyController = function($scope, $http) {
       if (data) {
         window.localStorage.isLogin = "Yes";
         window.localStorage.user = JSON.stringify(data);
-        window.location.reload();
+        $("#loginModal").modal("hide");
       }
       if (err) {
         alert("各种原因的登录失败：ID需要大小写\n是否错用了水源用户名/密码\n服务器挂了");
-        window.localStorage.username = window.localStorage.pw = window.localStorage.user = "";
-        return window.location.reload();
+        return window.localStorage.username = window.localStorage.pw = window.localStorage.user = "";
       }
     });
   };
