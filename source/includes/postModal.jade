@@ -1,0 +1,30 @@
+// postModal.jade
+
+#postModal.modal.fade(tabindex="-1",role="dialog",aria-labelledby="postModalLabel",aria-hidden="true")
+  .modal-dialog
+    .modal-content
+      .modal-body
+        form(role="form")
+          .form-group
+            label(for="postTitle") 发表文章：
+            input#postTitle.form-control(type="text",placeholder="标题：")
+          .form-group
+            label(for="postContent") 正文：
+            textarea#postContent.form-control(type="text",placeholder="请在此输入内容：")
+      .modal-footer
+        button.btn.btn-default(type="button",onclick="callDoPost()") 发帖
+
+script
+  :coffeescript
+    window.callDoPost = ->
+      title = $("#postTitle").val()
+      content = $("#postContent").val()
+      board = window.currentBoard.name
+      doPost {content,title,board}, (err, data)->
+        if data
+          $("#postModal").modal("hide")
+          window.location.reload()
+        if err
+          alert "各种原因的无法发帖：需要重新登录\n您没有权限\n服务器挂了"
+
+// ENDOF postModal.jade

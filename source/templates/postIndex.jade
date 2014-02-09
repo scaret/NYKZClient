@@ -3,8 +3,14 @@
 nav.navbar.navbar-default(role="navigation")
   .collapse.navbar-collapse
     .navbar-header
-    a.navbar-brand(href="#") {{state.board}}
+    a.navbar-brand(href="#/board/{{boardInfo.name}}") {{boardInfo.name}}（{{boardInfo.chinesename}}）
+    .navbar-brand
+      span 板主：
+      span(ng-repeat="bms in boardInfo.bm")
+        a(href="#/user/{{bms}}") {{bms}}
+        span &nbsp;&nbsp;
     ul.nav.navbar-nav.navbar-right
+      li: a(href="javascript:$('#postModal').modal()"): .glyphicon.glyphicon-plus
       li: a(href="#/board/{{state.board}}/start/{{state.start - 20}}"): .glyphicon.glyphicon-chevron-left
       li: a(href="#/board/{{state.board}}/start/{{state.start + 20}}"): .glyphicon.glyphicon-chevron-right
       li.dropdown

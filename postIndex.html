@@ -2,8 +2,11 @@
 <!-- postIndex.jade-->
 <nav role="navigation" class="navbar navbar-default">
   <div class="collapse navbar-collapse">
-    <div class="navbar-header"></div><a href="#" class="navbar-brand">{{state.board}}</a>
+    <div class="navbar-header"></div><a href="#/board/{{boardInfo.name}}" class="navbar-brand">{{boardInfo.name}}（{{boardInfo.chinesename}}）</a>
+    <div class="navbar-brand"><span>板主：</span><span ng-repeat="bms in boardInfo.bm"><a href="#/user/{{bms}}">{{bms}}</a><span>&nbsp;&nbsp;</span></span></div>
     <ul class="nav navbar-nav navbar-right">
+      <li><a href="javascript:$('#postModal').modal()">
+          <div class="glyphicon glyphicon-plus"></div></a></li>
       <li><a href="#/board/{{state.board}}/start/{{state.start - 20}}">
           <div class="glyphicon glyphicon-chevron-left"></div></a></li>
       <li><a href="#/board/{{state.board}}/start/{{state.start + 20}}">

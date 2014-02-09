@@ -16,6 +16,9 @@ script
           board: $routeParams.boardName
           start: data[0].index
           end: data[data.length - 1].index
+      $http.get("#{endpointurl}/nykzBoard/#{$routeParams.boardName}").success (data)->
+        $scope.boardInfo = data
+        window.currentBoard = data
       $scope.gotoPost = window.gotoPost($routeParams.boardName )
       $scope.friendly_time = friendly_time
 

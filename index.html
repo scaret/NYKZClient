@@ -142,6 +142,10 @@ postIndexController = function($scope, $routeParams, $http) {
       end: data[data.length - 1].index
     };
   });
+  $http.get("" + endpointurl + "/nykzBoard/" + $routeParams.boardName).success(function(data) {
+    $scope.boardInfo = data;
+    return window.currentBoard = data;
+  });
   $scope.gotoPost = window.gotoPost($routeParams.boardName);
   return $scope.friendly_time = friendly_time;
 };
@@ -354,6 +358,53 @@ bodyController = function($scope, $http) {
 
     </script>
     <!-- ENDOF simpleReplyModal.jade-->
+    <!-- postModal.jade-->
+    <div id="postModal" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <form role="form">
+              <div class="form-group">
+                <label for="postTitle">发表文章：</label>
+                <input id="postTitle" type="text" placeholder="标题：" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="postContent">正文：</label>
+                <textarea id="postContent" type="text" placeholder="请在此输入内容：" class="form-control"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" onclick="callDoPost()" class="btn btn-default">发帖</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>(function() {
+  window.callDoPost = function() {
+    var board, content, title;
+    title = $("#postTitle").val();
+    content = $("#postContent").val();
+    board = window.currentBoard.name;
+    return doPost({
+      content: content,
+      title: title,
+      board: board
+    }, function(err, data) {
+      if (data) {
+        $("#postModal").modal("hide");
+        window.location.reload();
+      }
+      if (err) {
+        return alert("各种原因的无法发帖：需要重新登录\n您没有权限\n服务器挂了");
+      }
+    });
+  };
+
+}).call(this);
+
+    </script>
+    <!-- ENDOF postModal.jade-->
     <!-- ENDOF footer.jade-->
     <style>#content {
   margin-top: 70px;
