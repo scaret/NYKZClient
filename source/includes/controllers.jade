@@ -41,9 +41,20 @@ script
         console.log data
 
     bodyController = ($scope, $http)->
-      if window.localStorage && window.localStorage.username
-        $scope.loginState = "您好， #{window.localStorage.username}"
-      else
-        $scope.loginState = "请登陆"
+      $scope.loginState = "请登陆"
+      if window.localStorage
+        if window.localStorage.username
+          $("#loginusername").val window.localStorage.username
+        if window.localStorage.pw
+          $("#loginpw").val window.localStorage.pw
+      if isFirstOpen()
+        $("#loginModal").modal "show"
+      if window.localStorage && window.localStorage.isLogin
+        $http.get("#{endpointurl}/nykzUser").success (data)->
+          if typeof data != "object"
+            $("#loginModal").modal "show"
+          else
+            window.currentUser = data
+            $scope.loginState = "您好，#{data.userid}"
 
 // ENDOF controllers.jade

@@ -17,7 +17,7 @@
 
 protocol = "http";
 
-host = "nykz.drupal.scaret.in";
+host = "nykz.drupal";
 
 endpoint = "v1";
 
@@ -29,7 +29,7 @@ csrftoken = "";
 
     </script>
     <!-- ENDOF config.jade-->
-    <script>var boardBlacklist, doPost, friendly_time, gotoPost, login, updatecsrf;
+    <script>var boardBlacklist, doPost, friendly_time, gotoPost, isFirstOpen, login, updatecsrf;
 
 friendly_time = function(time_stamp) {
   var ct, now_d;
@@ -106,6 +106,20 @@ doPost = function(data, callback) {
   });
 };
 
+isFirstOpen = function() {
+  if (window.localStorage) {
+    if (window.localStorage.notFirstOpen) {
+      return false;
+    } else {
+      window.localStorage.notFirstOpen = "Yes";
+      window.isFirstOpen = function() {
+        return true;
+      };
+      return true;
+    }
+  }
+};
+
     </script>
     <!-- controllers.jade-->
     <script>var boardIndexController, bodyController, postIndexController, postViewController, userViewController;
@@ -162,10 +176,27 @@ userViewController = function($scope, $routeParams, $http) {
 };
 
 bodyController = function($scope, $http) {
-  if (window.localStorage && window.localStorage.username) {
-    return $scope.loginState = "您好， " + window.localStorage.username;
-  } else {
-    return $scope.loginState = "请登陆";
+  $scope.loginState = "请登陆";
+  if (window.localStorage) {
+    if (window.localStorage.username) {
+      $("#loginusername").val(window.localStorage.username);
+    }
+    if (window.localStorage.pw) {
+      $("#loginpw").val(window.localStorage.pw);
+    }
+  }
+  if (isFirstOpen()) {
+    $("#loginModal").modal("show");
+  }
+  if (window.localStorage && window.localStorage.isLogin) {
+    return $http.get("" + endpointurl + "/nykzUser").success(function(data) {
+      if (typeof data !== "object") {
+        return $("#loginModal").modal("show");
+      } else {
+        window.currentUser = data;
+        return $scope.loginState = "您好，" + data.userid;
+      }
+    });
   }
 };
 
@@ -244,7 +275,7 @@ bodyController = function($scope, $http) {
                 <input id="loginusername" type="text" placeholder="username" class="form-control">
               </div>
               <div class="form-group">
-                <label for="loginusername">密码</label>
+                <label for="loginpw">密码</label>
                 <input id="loginpw" type="password" placeholder="password" class="form-control">
               </div>
             </form>

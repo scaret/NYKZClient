@@ -48,3 +48,13 @@ script
           callback null, data
         .fail (data)->
           callback data,null
+
+    isFirstOpen = ->
+      if window.localStorage
+        if window.localStorage.notFirstOpen
+          return false
+        else
+          window.localStorage.notFirstOpen = "Yes"
+          window.isFirstOpen = ->
+            true
+          return true
