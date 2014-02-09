@@ -331,6 +331,7 @@ bodyController = function($scope, $http) {
         window.localStorage.isLogin = "Yes";
         window.localStorage.user = JSON.stringify(data);
         $("#loginModal").modal("hide");
+        window.location.reload();
       }
       if (err) {
         alert("各种原因的登录失败：ID需要大小写\n是否错用了水源用户名/密码\n服务器挂了");
@@ -365,7 +366,7 @@ bodyController = function($scope, $http) {
   window.callReplySimple = function() {
     var board, content, refilename;
     content = $("#replyText").val();
-    refilename = "M." + window.currentPost.index.reid + ".A";
+    refilename = "M." + window.currentPost.index.id + ".A";
     board = window.currentPost.index.board;
     return doPost({
       content: content,

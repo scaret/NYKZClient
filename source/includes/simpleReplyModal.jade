@@ -15,7 +15,7 @@ script
   :coffeescript
     window.callReplySimple = ->
       content = $("#replyText").val()
-      refilename = "M.#{window.currentPost.index.reid}.A"
+      refilename = "M.#{window.currentPost.index.id}.A"
       board = window.currentPost.index.board
       doPost {content,refilename,board}, (err, data)->
         if data
