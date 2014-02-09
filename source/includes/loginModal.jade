@@ -24,6 +24,7 @@ script
       window.localStorage.pw = $("#loginpw").val()
       login (err, data)->
         if data
+          window.localStorage.isLogin = "Yes"
           window.localStorage.user = JSON.stringify data
           window.location.reload()
         if err

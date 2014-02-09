@@ -8,6 +8,8 @@ nav(class="navbar navbar-default navbar-fixed-top  navbar-inverse",role="navigat
       ul.nav.navbar-nav.navbar-right
         li: a(href="javascript:window.location.reload();"): .glyphicon.glyphicon-refresh
         li: a(href="javascript:window.history.go(-1);"): .glyphicon.glyphicon-arrow-left
+        li: li: a(href="javascript:$('#loginModal').modal()") {{loginState}}
+    //
         li.dropdown
           a.dropdown-toggle(data-toggle="dropdown"): .glyphicon.glyphicon-chevron-down
           ul.dropdown-menu

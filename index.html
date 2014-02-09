@@ -243,14 +243,18 @@ bodyController = function($scope, $http) {
                 <div class="glyphicon glyphicon-refresh"></div></a></li>
             <li><a href="javascript:window.history.go(-1);">
                 <div class="glyphicon glyphicon-arrow-left"></div></a></li>
-            <li class="dropdown"><a data-toggle="dropdown" class="dropdown-toggle">
-                <div class="glyphicon glyphicon-chevron-down"></div></a>
-              <ul class="dropdown-menu">
-                <li><a href="javascript:$('#loginModal').modal()">{{loginState}}</a></li>
-              </ul>
+            <li>
+              <li><a href="javascript:$('#loginModal').modal()">{{loginState}}</a></li>
             </li>
           </ul>
         </div>
+        <!--
+        li.dropdown
+          a.dropdown-toggle(data-toggle="dropdown"): .glyphicon.glyphicon-chevron-down
+          ul.dropdown-menu
+            li: a(href="javascript:$('#loginModal').modal()") {{loginState}}
+            
+        -->
       </div>
     </nav>
     <!-- ENDOF navbar.jade-->
@@ -292,6 +296,7 @@ bodyController = function($scope, $http) {
     window.localStorage.pw = $("#loginpw").val();
     return login(function(err, data) {
       if (data) {
+        window.localStorage.isLogin = "Yes";
         window.localStorage.user = JSON.stringify(data);
         window.location.reload();
       }
