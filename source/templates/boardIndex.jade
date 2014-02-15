@@ -1,8 +1,8 @@
 // boardIndex.jade
-ul
-  li(ng-repeat="cata in boardIndicies") {{cata[0].catagory_name}}
-    ul.list-group
-      li.list-group-item(ng-repeat="board in cata",class="{{board.iskboard ? 'list-group-item-warning' : ''}}")
-        a(href="#/board/{{board.name}}") {{board.name}}（{{board.chinesename}}）
+
+.cata(ng-repeat="cata in boardIndicies")
+  h3 {{cata[0].catagory_name}}
+  div.list-group
+      a.list-group-item(href="#/board/{{board.name}}",ng-repeat="board in cata",class="{{board.iskboard ? 'list-group-item-warning' : ''}}") {{board.name}}（{{board.chinesename}}）
 
 // ENDOF boardIndex.jade

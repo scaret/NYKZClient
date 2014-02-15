@@ -1,10 +1,7 @@
 
 <!-- boardIndex.jade-->
-<ul>
-  <li ng-repeat="cata in boardIndicies">{{cata[0].catagory_name}}
-    <ul class="list-group">
-      <li ng-repeat="board in cata" class="list-group-item {{board.iskboard ? 'list-group-item-warning' : ''}}"><a href="#/board/{{board.name}}">{{board.name}}（{{board.chinesename}}）</a></li>
-    </ul>
-  </li>
-</ul>
+<div ng-repeat="cata in boardIndicies" class="cata">
+  <h3>{{cata[0].catagory_name}}</h3>
+  <div class="list-group"><a href="#/board/{{board.name}}" ng-repeat="board in cata" class="list-group-item {{board.iskboard ? 'list-group-item-warning' : ''}}">{{board.name}}（{{board.chinesename}}）</a></div>
+</div>
 <!-- ENDOF boardIndex.jade-->

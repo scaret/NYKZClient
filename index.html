@@ -375,6 +375,7 @@ bodyController = function($scope, $http) {
     }, function(err, data) {
       if (data) {
         $("#simpleReplyModal").modal("hide");
+        window.history.go(-1);
       }
       if (err) {
         return alert("各种原因的无法发帖：需要重新登录\n您没有权限\n服务器挂了");

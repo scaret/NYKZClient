@@ -20,18 +20,16 @@ nav.navbar.navbar-default(role="navigation")
           li: a(href="#/board/{{state.board}}/start/1") 转到第一页
           li: a(href="#/board/{{state.board}}") 转到最末页
           li: a(ng-click="gotoPost()") 转到第几帖
-table.table
-  thead
-    tr
-      th 序号
-      th 作者
-      th 日期
-      th 标题
-  tr(ng-repeat="postIndex in postIndices")
-    td {{postIndex.index}}
-    td: a(href="#/user/{{postIndex.owner}}") {{postIndex.owner}}
-    td {{friendly_time(postIndex.id)}}
-    td: a(href="#/pst/board/{{postIndex.board}}/file/{{postIndex.id}}") {{postIndex.title}}
+
+.list-group
+  a.list-group-item(href="#/pst/board/{{postIndex.board}}/file/{{postIndex.id}}",ng-repeat="postIndex in postIndices")
+    h4.list-group-item-heading(style="{{postIndex.id !== postIndex.reid ? '' : 'font-weight:bold;'}}") {{postIndex.title}}
+    p.list-group-item-text
+      .row
+        .col-xs-1
+        .col-xs-2 {{postIndex.index}}
+        .col-xs-3 {{postIndex.owner}}
+        .col-xs-2 {{friendly_time(postIndex.id)}}
 
 nav.navbar.navbar-default(role="navigation")
   .collapse.navbar-collapse

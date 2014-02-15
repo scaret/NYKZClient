@@ -20,6 +20,7 @@ script
       doPost {content,refilename,board}, (err, data)->
         if data
           $("#simpleReplyModal").modal("hide")
+          window.history.go -1
         if err
           alert "各种原因的无法发帖：需要重新登录\n您没有权限\n服务器挂了"
 
